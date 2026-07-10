@@ -75,7 +75,43 @@ const BY_EDUCATION = {
   christian_university_grads: { 2010: 32.2, 2020: 28.3, 2025: 24.9 },
 };
 
-/* Sources, all independently verified and fetched during preparation of this site */
+/* ============================================================================
+   EARLY SIGNAL, 2010-2015 — checked carefully before including.
+   Two things hold up under scrutiny; one thing I tested and DIDN'T include
+   because it doesn't survive the test (see SHARING-NOTES.md):
+
+   1. The 15-19 band's cross-sectional growth rate collapsed well before it
+      went negative. Extrapolating its own 2000-2010 pace forward predicts
+      +2.13pp over 2010-2015; it actually gained +0.29pp — about 14% of the
+      trend-implied pace. Growth didn't reverse yet, but it had already
+      nearly stalled, five years before the 2015-2020 cohort reversal.
+      NOTE: this is specific to the 15-19 band. The 20-24 band does NOT show
+      this — it grew faster than its own trend implied over 2010-2015 — so
+      this is not presented as a broad "all young bands" pattern.
+   2. Peak timing moved later by age, in order: 15-19 and 20-24 both peaked
+      by 2015; 25-29 didn't peak until 2020. The front of the reversal
+      crossed the age bands in sequence.
+   Tested and NOT used: whether 2010-2015 TRANSITION sizes (not cross-
+   sectional levels) already showed a "youngest = weakest" gradient. They
+   don't — 30-34→35-39 grew just as slowly as the youngest two transitions
+   that window, so this specific claim doesn't hold up and isn't claimed
+   anywhere on the site.
+   ============================================================================ */
+const EARLY_SIGNAL_1519 = {
+  points: [[2000, 8.03], [2010, 12.28], [2015, 12.57], [2020, 11.76], [2025, 8.95]],
+  trendImplied2015: 14.41, // 12.28 + (12.28-8.03)/10*5 — where the 2000–2010 pace would have landed
+  actualGrowth2010_2015: 0.29,
+  impliedGrowth2010_2015: 2.13,
+  pctOfExpectedPace: 13.5,
+};
+
+const PEAK_TIMING = [
+  { band: "15-19", peakYear: 2015, peakVal: 12.57 },
+  { band: "20-24", peakYear: 2015, peakVal: 12.66 },
+  { band: "25-29", peakYear: 2020, peakVal: 12.23 },
+];
+
+
 const SOURCES = {
   ghs2025_release: "https://www.singstat.gov.sg/publication-resources/general-household-survey-2025",
   ghs2025_pdf: "https://www.singstat.gov.sg/files/1559c94a-efc1-4262-84fd-042c9bd96e68.pdf",
