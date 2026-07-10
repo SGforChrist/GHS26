@@ -247,8 +247,116 @@ function drawEducationChart() {
 }
 
 /* ============================================================================
-   INIT
+   CHART 5 — 15-19 band: trend-implied growth vs what actually happened
    ============================================================================ */
+function drawStallChart(mountId) {
+  const mount = document.getElementById(mountId);
+  if (!mount) return;
+  const w = mount.clientWidth || 480;
+  const h = 260;
+  const margin = { top: 20, right: 24, bottom: 32, left: 38 };
+  const innerW = w - margin.left - margin.right;
+  const innerH = h - margin.top - margin.bottom;
+
+  const svg = svgEl("svg", { viewBox: `0 0 ${w} ${h}`, width: "100%", height: h });
+  mount.innerHTML = "";
+  mount.appendChild(svg);
+
+  const x = makeScale([2000, 2015], [margin.left, margin.left + innerW]);
+  const y = makeScale([7, 15], [margin.top + innerH, margin.top]);
+
+  [8, 10, 12, 14].forEach((v) => {
+    const ly = y(v);
+    svg.appendChild(svgEl("line", { x1: margin.left, x2: margin.left + innerW, y1: ly, y2: ly, stroke: "var(--ink-line)", "stroke-width": 1 }));
+    const lbl = svgEl("text", { x: margin.left - 8, y: ly + 4, "text-anchor": "end", "font-family": "var(--font-mono)", "font-size": "10.5", fill: "var(--text-on-ink-dim)" });
+    lbl.textContent = v + "%";
+    svg.appendChild(lbl);
+  });
+
+  const actualPts = EARLY_SIGNAL_1519.points.filter((p) => p[0] <= 2015);
+  const dActual = actualPts.map((p, i) => `${i === 0 ? "M" : "L"} ${x(p[0])} ${y(p[1])}`).join(" ");
+  svg.appendChild(svgEl("path", { d: dActual, fill: "none", stroke: "var(--text-on-ink-dim)", "stroke-width": 2.4 }));
+
+  // dashed trend-implied branch from 2010 point to the hypothetical 2015 value
+  const p2010 = actualPts.find((p) => p[0] === 2010);
+  const dTrend = `M ${x(2010)} ${y(p2010[1])} L ${x(2015)} ${y(EARLY_SIGNAL_1519.trendImplied2015)}`;
+  svg.appendChild(svgEl("path", { d: dTrend, fill: "none", stroke: "var(--accent)", "stroke-width": 2, "stroke-dasharray": "5,4" }));
+
+  // gap bracket at 2015
+  const yActual2015 = y(actualPts.find((p) => p[0] === 2015)[1]);
+  const yTrend2015 = y(EARLY_SIGNAL_1519.trendImplied2015);
+  svg.appendChild(svgEl("line", { x1: x(2015) + 6, x2: x(2015) + 6, y1: yTrend2015, y2: yActual2015, stroke: "var(--signal-soft)", "stroke-width": 1.5 }));
+
+  actualPts.forEach((p) => {
+    const c = svgEl("circle", { cx: x(p[0]), cy: y(p[1]), r: 4, fill: "var(--text-on-ink)", style: "cursor:pointer" });
+    c.addEventListener("mousemove", (e) => showTooltip(e, `<strong>${p[0]}</strong><br>${p[1].toFixed(2)}% actual`));
+    c.addEventListener("mouseleave", hideTooltip);
+    svg.appendChild(c);
+  });
+  const ghost = svgEl("circle", { cx: x(2015), cy: yTrend2015, r: 4, fill: "none", stroke: "var(--accent)", "stroke-width": 2, style: "cursor:pointer" });
+  ghost.addEventListener("mousemove", (e) => showTooltip(e, `<strong>2015, if the 2000–2010 pace had held</strong><br>${EARLY_SIGNAL_1519.trendImplied2015.toFixed(2)}% (implied)`));
+  ghost.addEventListener("mouseleave", hideTooltip);
+  svg.appendChild(ghost);
+
+  const lbl2015 = svgEl("text", { x: x(2015) + 12, y: (yActual2015 + yTrend2015) / 2 + 4, "font-family": "var(--font-mono)", "font-size": "11.5", fill: "var(--signal-soft)", "font-weight": "600" });
+  lbl2015.textContent = `only ${EARLY_SIGNAL_1519.pctOfExpectedPace}% of trend`;
+  svg.appendChild(lbl2015);
+
+  [2000, 2005, 2010, 2015].forEach((yr) => {
+    const lbl = svgEl("text", { x: x(yr), y: h - 8, "text-anchor": "middle", "font-family": "var(--font-mono)", "font-size": "10.5", fill: "var(--text-on-ink-dim)" });
+    lbl.textContent = yr;
+    svg.appendChild(lbl);
+  });
+}
+
+/* ============================================================================
+   CHART 6 — Peak timing: when each age band's growth topped out
+   ============================================================================ */
+function drawPeakTimingChart(mountId) {
+  const mount = document.getElementById(mountId);
+  if (!mount) return;
+  const w = mount.clientWidth || 480;
+  const h = 260;
+  const margin = { top: 20, right: 60, bottom: 32, left: 38 };
+  const innerW = w - margin.left - margin.right;
+  const innerH = h - margin.top - margin.bottom;
+
+  const svg = svgEl("svg", { viewBox: `0 0 ${w} ${h}`, width: "100%", height: h });
+  mount.innerHTML = "";
+  mount.appendChild(svg);
+
+  const x = makeScale([2000, 2025], [margin.left, margin.left + innerW]);
+  const y = makeScale([7, 15], [margin.top + innerH, margin.top]);
+  const bandKey = { "15-19": "15-19", "20-24": "20-24", "25-29": "25-29" };
+  const colors = { "15-19": "var(--signal-soft)", "20-24": "var(--accent)", "25-29": "var(--neutral)" };
+
+  Object.entries(bandKey).forEach(([label, key]) => {
+    const series = ["2000", "2010", "2015", "2020", "2025"].map((yr) => [+yr, AGE_PCT_BY_YEAR[yr][key]]);
+    const d = series.map((p, i) => `${i === 0 ? "M" : "L"} ${x(p[0])} ${y(p[1])}`).join(" ");
+    svg.appendChild(svgEl("path", { d, fill: "none", stroke: colors[label], "stroke-width": 2.2, opacity: 0.9 }));
+    series.forEach((p) => {
+      const c = svgEl("circle", { cx: x(p[0]), cy: y(p[1]), r: 3, fill: colors[label], style: "cursor:pointer" });
+      c.addEventListener("mousemove", (e) => showTooltip(e, `<strong>${label}</strong><br>${p[0]}: ${p[1].toFixed(2)}%`));
+      c.addEventListener("mouseleave", hideTooltip);
+      svg.appendChild(c);
+    });
+    const peak = PEAK_TIMING.find((p) => p.band === label);
+    const ring = svgEl("circle", { cx: x(peak.peakYear), cy: y(peak.peakVal), r: 7, fill: "none", stroke: colors[label], "stroke-width": 1.5 });
+    svg.appendChild(ring);
+    const last = series[series.length - 1];
+    const tag = svgEl("text", { x: x(2025) + 8, y: y(last[1]) + 4, "font-family": "var(--font-mono)", "font-size": "11", fill: colors[label], "font-weight": "600" });
+    tag.textContent = label;
+    svg.appendChild(tag);
+  });
+
+  [2000, 2010, 2015, 2020, 2025].forEach((yr) => {
+    const lbl = svgEl("text", { x: x(yr), y: h - 8, "text-anchor": "middle", "font-family": "var(--font-mono)", "font-size": "10", fill: "var(--text-on-ink-dim)" });
+    lbl.textContent = yr;
+    svg.appendChild(lbl);
+  });
+}
+
+
 function initToggle() {
   const btns = document.querySelectorAll(".toggle-btn");
   btns.forEach((btn) => {
@@ -263,10 +371,11 @@ function initToggle() {
 
 function renderAll() {
   drawCohortRibbon("cohort-ribbon", { height: 320 });
-  drawCohortRibbon("lifecourse-chart", { height: 300 });
   drawTransitionChart("cross");
   populateAgeBandTable();
   drawEducationChart();
+  drawStallChart("stall-chart");
+  drawPeakTimingChart("peak-chart");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

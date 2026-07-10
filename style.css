@@ -108,6 +108,21 @@ p { margin: 0 0 1.1em; }
    HERO
    ============================================================================ */
 .hero { background: var(--ink); color: var(--text-on-ink); padding: 68px 0 80px; }
+.hero-simple { padding: 120px 0 100px; text-align: center; }
+.hero-simple .wrap { max-width: 880px; }
+.hero-simple .eyebrow { display: flex; justify-content: center; }
+.hero-simple h1 { max-width: none; margin-left: auto; margin-right: auto; }
+.hero-hook { font-size: 19px; color: var(--text-on-ink-dim); max-width: 46ch; margin: 0 auto 48px; line-height: 1.6; }
+.scroll-cue {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-on-ink-dim); text-decoration: none; transition: color 0.15s ease;
+}
+.scroll-cue:hover { color: var(--text-on-ink); }
+.scroll-cue svg { animation: bob 2.2s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
+
 .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
 @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } }
 
@@ -256,8 +271,40 @@ p { margin: 0 0 1.1em; }
 .role-card p { font-size: 15px; color: var(--text-on-paper-dim); margin: 0; }
 
 /* ============================================================================
-   METHODOLOGY NOTE
+   SIGNAL GRID (2010-2015 early-signal cards: holds up / doesn't hold up)
    ============================================================================ */
+.signal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin: 40px 0 8px; align-items: start; }
+@media (max-width: 980px) { .signal-grid { grid-template-columns: 1fr; } }
+.signal-card { background: var(--paper-raised); border: 1px solid var(--paper-line); border-radius: 8px; padding: 24px 24px 22px; }
+.signal-card-no { background: rgba(140,130,105,0.12); border-style: dashed; }
+.signal-tag { display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 14px; }
+.signal-tag-yes { background: rgba(92,122,94,0.18); color: var(--positive); }
+.signal-tag-no { background: rgba(140,130,105,0.22); color: var(--text-on-paper-dim); }
+.signal-card h3 { font-size: 17px; margin-bottom: 10px; }
+.signal-card p { font-size: 14.5px; color: var(--text-on-paper-dim); }
+.signal-card .fine-note { margin-top: 14px; padding-top: 12px; font-size: 13px; }
+
+.ribbon-payoff { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--paper-line); }
+
+/* ============================================================================
+   WHY GRID — 5 col variant
+   ============================================================================ */
+.why-grid-5 { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1080px) { .why-grid-5 { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px) { .why-grid-5 { grid-template-columns: 1fr; } }
+.why-grid-5 .why-num { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--signal); background: rgba(178,58,46,0.1); padding: 3px 9px; border-radius: 20px; display: inline-block; }
+.why-grid-5 h3 { font-size: 16.5px; }
+.why-grid-5 p { font-size: 14px; }
+
+/* ============================================================================
+   CTA BANNER
+   ============================================================================ */
+.cta-banner { background: var(--ink); color: var(--text-on-ink); border-radius: 10px; padding: 36px 38px; margin: 34px 0; }
+.cta-banner h3 { color: var(--text-on-ink); font-size: 20px; margin-bottom: 12px; }
+.cta-banner p { color: var(--text-on-ink-dim); max-width: 60ch; margin-bottom: 0; }
+.cta-banner .hero-actions { margin-top: 24px; }
+.cta-banner .btn-primary { cursor: pointer; border: none; font: inherit; font-family: var(--font-mono); }
+
 .methodology-note { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--ink-line); }
 .methodology-note h3 { color: var(--text-on-ink); font-size: 17px; }
 .methodology-note p { font-size: 15px; color: var(--text-on-ink-dim); }
