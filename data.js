@@ -49,16 +49,18 @@ const NATIONAL = {
   protestant_loss_pct_2020_2025: 16,
 };
 
-/* By age band, 2020 vs 2025 (national, all ages, for the "not just youth"
-   completeness table) */
+/* By age band, 2020 vs 2025 (national, all ages) — verified against source.
+   Ordered youngest-first for the site table. */
 const AGE_BAND_CHANGE_2020_2025 = [
-  { band: "45–49", y2020: 13.4, y2025: 9.3, change: -4.2 },
-  { band: "80–84", y2020: 11.8, y2025: 8.0, change: -3.9 },
-  { band: "40–44", y2020: 11.6, y2025: 8.5, change: -3.1 },
   { band: "15–19", y2020: 11.8, y2025: 9.0, change: -2.8 },
+  { band: "20–24", y2020: 11.7, y2025: 9.5, change: -2.1 },
   { band: "25–29", y2020: 12.2, y2025: 9.8, change: -2.5 },
-  { band: "20–24", y2020: 11.7, y2025: 9.5, change: -2.2 },
+  { band: "30–34", y2020: 11.7, y2025: 9.4, change: -2.2 },
   { band: "35–39", y2020: 10.9, y2025: 9.4, change: -1.5 },
+  { band: "40–44", y2020: 11.6, y2025: 8.5, change: -3.1 },
+  { band: "45–49", y2020: 13.4, y2025: 9.3, change: -4.2 },
+  { band: "55–59", y2020: 12.4, y2025: 10.5, change: -1.9 },
+  { band: "65–69", y2020: 11.2, y2025: 10.0, change: -1.2 },
 ];
 
 /* Absolute counts, ages 15-24 */
@@ -76,40 +78,50 @@ const BY_EDUCATION = {
 };
 
 /* ============================================================================
-   EARLY SIGNAL, 2010-2015 — checked carefully before including.
-   Two things hold up under scrutiny; one thing I tested and DIDN'T include
-   because it doesn't survive the test (see SHARING-NOTES.md):
+   THE GROWTH-WINDOW COLLAPSE — the clearest single pattern in the data.
+   Each cohort is followed from age 15-19 forward. What changes across cohorts
+   is not where they START (that rises then falls) but how long they GROW
+   before declining. This is the defensible, checkable version of "each
+   generation is weaker" — it's about the shape of the curve, not the height.
 
-   1. The 15-19 band's cross-sectional growth rate collapsed well before it
-      went negative. Extrapolating its own 2000-2010 pace forward predicts
-      +2.13pp over 2010-2015; it actually gained +0.29pp — about 14% of the
-      trend-implied pace. Growth didn't reverse yet, but it had already
-      nearly stalled, five years before the 2015-2020 cohort reversal.
-      NOTE: this is specific to the 15-19 band. The 20-24 band does NOT show
-      this — it grew faster than its own trend implied over 2010-2015 — so
-      this is not presented as a broad "all young bands" pattern.
-   2. Peak timing moved later by age, in order: 15-19 and 20-24 both peaked
-      by 2015; 25-29 didn't peak until 2020. The front of the reversal
-      crossed the age bands in sequence.
-   Tested and NOT used: whether 2010-2015 TRANSITION sizes (not cross-
-   sectional levels) already showed a "youngest = weakest" gradient. They
-   don't — 30-34→35-39 grew just as slowly as the youngest two transitions
-   that window, so this specific claim doesn't hold up and isn't claimed
-   anywhere on the site.
+   Growth window (years of rising Protestant identification before the peak):
+     Cohort 15-19 in 2000:  grew ~20 years (peaked 2020 at 10.9%)
+     Cohort 15-19 in 2010:  grew ~5 years  (peaked 2015 at 12.7%)
+     Cohort 15-19 in 2015:  grew 0 years   (peaked at 15-19, declined since)
+     Cohort 15-19 in 2020:  grew 0 years   (peaked at 15-19, declined since)
    ============================================================================ */
-const EARLY_SIGNAL_1519 = {
-  points: [[2000, 8.03], [2010, 12.28], [2015, 12.57], [2020, 11.76], [2025, 8.95]],
-  trendImplied2015: 14.41, // 12.28 + (12.28-8.03)/10*5 — where the 2000–2010 pace would have landed
-  actualGrowth2010_2015: 0.29,
-  impliedGrowth2010_2015: 2.13,
-  pctOfExpectedPace: 13.5,
+const COHORT_LINES = {
+  "Turned 15–19 in 2000": {
+    born: "born ~1981–85",
+    growthYears: 20,
+    points: [[2000, 8.03], [2010, 10.12], [2015, 10.77], [2020, 10.90], [2025, 8.54]],
+    ages: ["15–19", "25–29", "30–34", "35–39", "40–44"],
+  },
+  "Turned 15–19 in 2010": {
+    born: "born ~1991–95",
+    growthYears: 5,
+    points: [[2010, 12.28], [2015, 12.66], [2020, 12.23], [2025, 9.43]],
+    ages: ["15–19", "20–24", "25–29", "30–34"],
+  },
+  "Turned 15–19 in 2015": {
+    born: "born ~1996–2000",
+    growthYears: 0,
+    points: [[2015, 12.57], [2020, 11.67], [2025, 9.76]],
+    ages: ["15–19", "20–24", "25–29"],
+  },
+  "Turned 15–19 in 2020": {
+    born: "born ~2001–05",
+    growthYears: 0,
+    points: [[2020, 11.76], [2025, 9.52]],
+    ages: ["15–19", "20–24"],
+  },
+  "Turned 15–19 in 2025": {
+    born: "born ~2006–10",
+    growthYears: null,
+    points: [[2025, 8.95]],
+    ages: ["15–19"],
+  },
 };
-
-const PEAK_TIMING = [
-  { band: "15-19", peakYear: 2015, peakVal: 12.57 },
-  { band: "20-24", peakYear: 2015, peakVal: 12.66 },
-  { band: "25-29", peakYear: 2020, peakVal: 12.23 },
-];
 
 
 const SOURCES = {
