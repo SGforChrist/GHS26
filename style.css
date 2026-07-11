@@ -431,3 +431,82 @@ a.header-mark:hover { color: var(--text-on-paper); }
 /* Detail-body dark-section fixups */
 .section-ink .detail-block summary { background: var(--ink-raised); color: var(--text-on-ink); }
 .section-ink .detail-block summary:hover { background: var(--ink-line); }
+
+/* ============================================================================
+   GRACE SECTIONS — the theological heart. Warm, distinct from ink/paper.
+   ============================================================================ */
+:root {
+  --grace-bg: #f4ede0;
+  --grace-bg2: #efe4d0;
+  --grace-ink: #2a2116;
+  --grace-dim: #6b5d47;
+  --grace-accent: #9a6a2f;
+  --grace-line: #ddc9a3;
+}
+.section-grace {
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(201,154,59,0.10), transparent 60%),
+    linear-gradient(180deg, var(--grace-bg) 0%, var(--grace-bg2) 100%);
+  color: var(--grace-ink);
+  position: relative;
+}
+.section-grace::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--grace-accent), transparent);
+  opacity: 0.5;
+}
+.section-grace h2 { color: var(--grace-ink); max-width: 22ch; }
+.section-grace h3 { color: var(--grace-ink); }
+.section-grace p:not(.eyebrow) { color: var(--grace-dim); }
+.section-grace .lede { color: var(--grace-ink); }
+.section-grace .lede strong, .section-grace p strong { color: var(--grace-ink); }
+.section-grace em { color: var(--grace-accent); font-style: italic; }
+.eyebrow-grace { color: var(--grace-accent) !important; display: block; }
+
+/* Scripture blockquote */
+.scripture {
+  margin: 32px 0; padding: 26px 30px; border-left: 3px solid var(--grace-accent);
+  background: rgba(255,255,255,0.35); border-radius: 0 8px 8px 0;
+}
+.scripture p {
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: 20px; line-height: 1.55; color: var(--grace-ink) !important; margin: 0 0 12px;
+}
+.scripture cite { font-family: var(--font-mono); font-style: normal; font-size: 12.5px; color: var(--grace-accent); letter-spacing: 0.02em; }
+
+/* Countercultural highlight block */
+.grace-countercultural {
+  margin: 34px 0; padding: 28px 30px; border-radius: 10px;
+  background: linear-gradient(135deg, rgba(154,106,47,0.12), rgba(154,106,47,0.05));
+  border: 1px solid var(--grace-line);
+}
+.grace-countercultural h3 { font-size: 21px; margin-bottom: 12px; line-height: 1.25; }
+.grace-countercultural p { font-size: 16px; color: var(--grace-dim); margin: 0; line-height: 1.65; }
+
+.callout-grace {
+  font-family: var(--font-display); font-size: 20px; font-weight: 500; line-height: 1.5;
+  color: var(--grace-ink) !important; max-width: 42ch; border-left: 3px solid var(--grace-accent);
+  padding-left: 22px; margin: 36px 0 0;
+}
+.callout-grace strong { color: var(--grace-accent); }
+
+/* Closing grace section — slightly deeper, more final */
+.section-grace-close {
+  background:
+    radial-gradient(140% 90% at 50% 120%, rgba(154,106,47,0.14), transparent 55%),
+    linear-gradient(180deg, var(--grace-bg2) 0%, #ead9bf 100%);
+  text-align: center;
+}
+.section-grace-close h2 { margin-left: auto; margin-right: auto; }
+.section-grace-close .eyebrow-grace { display: flex; justify-content: center; }
+.section-grace-close .lede { margin-left: auto; margin-right: auto; }
+.section-grace-close .scripture-close {
+  border-left: none; border-top: 1px solid var(--grace-line); border-bottom: 1px solid var(--grace-line);
+  background: transparent; border-radius: 0; text-align: center; max-width: 620px; margin: 34px auto;
+  padding: 26px 20px;
+}
+.section-grace-close .scripture-close p { font-size: 23px; }
+.section-grace-close .scripture-close cite { display: block; }
+
+/* Nav active state for grace anchor */
+.header-nav a[href="#grace"].is-current { border-color: var(--grace-accent); color: var(--grace-accent); }
