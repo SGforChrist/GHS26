@@ -136,4 +136,5 @@ const SOURCES = {
   generations_project: "https://graceworks.com.sg/store/category/pastoral-resources/the-generations-project/",
   ips_religious_identity: "https://lkyspp.nus.edu.sg/docs/default-source/ips/ips-working-papers-65_religious-identity-and-practice-among-singaporeans.pdf",
   ips_moral_attitudes: "https://lkyspp.nus.edu.sg/ips/news/details/ips-working-papers-no.-66---moral-attitudes-in-flux--comparing-trends-across-religions-in-singapore",
+  raman_decline_may_be_mercy: "https://saltandlight.sg/news/the-decline-may-be-mercy-what-the-general-household-survey-2025-may-be-saying-to-the-singapore-church/",
 };

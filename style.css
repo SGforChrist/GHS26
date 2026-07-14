@@ -510,3 +510,44 @@ a.header-mark:hover { color: var(--text-on-paper); }
 
 /* Nav active state for grace anchor */
 .header-nav a[href="#grace"].is-current { border-color: var(--grace-accent); color: var(--grace-accent); }
+
+/* ============================================================================
+   PAPER-UPDATE ADDITIONS — home-as-liturgy device, why-card expand, grace
+   second voice
+   ============================================================================ */
+
+/* Expandable "+" note inside a why-row (Culture card: pandemic point) */
+.why-expand { margin-top: 16px; }
+.why-expand summary {
+  cursor: pointer; font-family: var(--font-mono); font-size: 12.5px; color: var(--signal-soft);
+  list-style: none; display: inline-flex; align-items: center; gap: 6px;
+}
+.why-expand summary::-webkit-details-marker { display: none; }
+.why-expand summary:hover { color: var(--text-on-ink); }
+.why-expand[open] summary { margin-bottom: 12px; }
+.why-expand p { font-size: 14.5px; color: var(--text-on-ink-dim); margin: 0; padding-left: 4px; border-left: 2px solid var(--ink-line); padding-left: 14px; }
+
+/* Home-as-liturgy two-column device — "said" vs "lived" */
+.liturgy-table { margin: 20px 0; display: flex; flex-direction: column; gap: 1px; border-radius: 6px; overflow: hidden; }
+.liturgy-row { display: grid; grid-template-columns: 1fr 1fr; }
+.liturgy-said, .liturgy-lived { padding: 13px 18px; font-size: 14.5px; line-height: 1.4; }
+.liturgy-said { background: rgba(255,255,255,0.03); color: var(--text-on-ink-dim); border-right: 1px solid var(--ink-line); }
+.liturgy-lived { background: rgba(178,58,46,0.10); color: var(--text-on-ink); }
+.liturgy-said em, .liturgy-lived em { font-style: italic; color: var(--text-on-ink); }
+.liturgy-lived em { color: var(--signal-soft); }
+@media (max-width: 620px) {
+  .liturgy-row { grid-template-columns: 1fr; }
+  .liturgy-said { border-right: none; border-bottom: 1px solid var(--ink-line); }
+}
+
+/* Grace section: companion voice (Raman) box */
+.grace-second-voice {
+  margin: 30px 0; padding: 24px 28px; border-radius: 10px;
+  background: rgba(255,255,255,0.4); border: 1px dashed var(--grace-line);
+}
+.second-voice-label {
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--grace-accent); margin: 0 0 12px;
+}
+.grace-second-voice p:not(.second-voice-label) { color: var(--grace-dim); font-size: 15.5px; line-height: 1.65; margin: 0; }
+.grace-second-voice a { color: var(--grace-accent); text-decoration-color: rgba(154,106,47,0.4); }
